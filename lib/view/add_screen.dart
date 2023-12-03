@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AddPage extends StatelessWidget {
-  AddPage({super.key});
+ const AddPage({super.key});
   @override
   Widget build(BuildContext context) {
     final addData = Provider.of<AddController>(context);
@@ -20,20 +20,20 @@ class AddPage extends StatelessWidget {
         child: ListView(
           children: [
             Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8.0),
               child: TextField(
                 controller: addData.nameController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                     border: OutlineInputBorder(), label: Text('Doner ')),
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8.0),
               child: TextField(
                 controller: addData.numberController,
                 keyboardType: TextInputType.number,
                 maxLength: 10,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                     border: OutlineInputBorder(), label: Text('Phone Number ')),
               ),
             ),

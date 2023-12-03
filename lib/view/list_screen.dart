@@ -1,7 +1,7 @@
-import 'package:blooddonation3/controller/add_controller.dart';
+import 'package:blooddonation3/controller/home_controller.dart';
+import 'package:blooddonation3/model/donor_model.dart';
 import 'package:blooddonation3/view/add_screen.dart';
 import 'package:blooddonation3/view/update_screen.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -9,70 +9,104 @@ class UsersList extends StatelessWidget {
   UsersList({super.key});
   @override
   Widget build(BuildContext context) {
-    final addData = Provider.of<AddController>(context);
+      Provider.of<Homecontroller>(context).fecthDonorDatas();
+    final addData = Provider.of<Homecontroller>(context);
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Donors List',
-          style: TextStyle(color: Colors.white),
+            appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: const Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'DONORS ',
+              style: TextStyle(
+                  color: Color.fromARGB(255, 0, 0, 0),
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),
+            ),
+            Text(
+              'LIST',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),
+            )
+          ],
         ),
+        centerTitle: true,
       ),
-      body: StreamBuilder(
-        stream: addData.donor.orderBy('name').snapshots(),
-        builder: (context, AsyncSnapshot snapshot) {
-          if (snapshot.hasData) {
-            return ListView.builder(
-              itemCount: snapshot.data!.docs.length,
-              itemBuilder: (context, index) {
-                // print('sanpppppppppppppppp$snapshot');
-                // print('dataaaaaaaaaaaaaaa${snapshot.data.docs[index]}');
-                final DocumentSnapshot donorSnap = snapshot.data.docs[index];
-                return Card(
-                  child: ListTile(
-                      leading: CircleAvatar(
-                        child: Text(
-                          donorSnap['group'],
-                          style: TextStyle(color: Colors.white),
+      body: Consumer<Homecontroller>(builder: (context, value, index) {
+        if (value.donorDatas.isEmpty) {
+          return const Center(
+                child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircleAvatar(
+                  radius: 35,
+                  backgroundColor: Colors.black,
+                  child: Icon(Icons.bloodtype,color: Colors.red,size: 40,)
+                ),
+                SizedBox(
+                  width: 8,
+                ),
+                Text(
+                  'Add Donors',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 23,
+                      fontStyle: FontStyle.italic),
+                ),
+              ],
+            ));
+        }
+        return ListView.builder(
+          itemCount: value.donorDatas.length,
+          itemBuilder: (context, index) {
+            final DonorModel donorSnap = value.donorDatas[index];
+            return Card(
+              child: ListTile(
+                  leading: CircleAvatar(
+                    child: Text(
+                      donorSnap.group .toString()  ,
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                    backgroundColor: Colors.black,
+                  ),
+                  title: Text(donorSnap.name.toString() ),
+                  subtitle: Text(donorSnap.phone.toString() ),
+                  // trailing: Row(),//
+                  trailing: SizedBox(
+                    width: 100,
+                    child: Row(
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => UpdataUser(
+                                          name: donorSnap.name.toString() ,
+                                          number: donorSnap.phone.toString(),
+                                          group: donorSnap.group.toString() ,
+                                          id: donorSnap.id,
+                                        )));
+                          },
+                          icon: const Icon(Icons.edit),color: Colors.blue,
                         ),
-                        backgroundColor: Colors.black,
-                      ),
-                      title: Text(donorSnap['name']),
-                      subtitle: Text(donorSnap['phone'].toString()),
-                      // trailing: Row(),//
-                      trailing: SizedBox(
-                        width: 100,
-                        child: Row(
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => UpdataUser(
-                                              name: donorSnap['name'],
-                                              number: donorSnap['phone'].toString(),
-                                              group: donorSnap['group'],
-                                              id: donorSnap.id,
-                                            )));
-                              },
-                              icon: Icon(Icons.edit),
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                addData.deleteDonor(donorSnap.id);
-                              },
-                              icon: Icon(Icons.delete),
-                            )
-                          ],
-                        ),
-                      )),
-                );
-              },
+                        IconButton(
+                          onPressed: () {
+                            addData.deleteDonor(donorSnap.id);
+                          },
+                          icon: const Icon(Icons.delete,color: Colors.red,),
+                        )
+                      ],
+                    ),
+                  )),
             );
-          }
-          return Container();
-        },
-      ),
+          },
+        );
+      }),
       floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.red,
           child: const Icon(

@@ -1,25 +1,19 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:blooddonation3/controller/home_controller.dart';
+import 'package:blooddonation3/services/donor_service.dart';
 import 'package:flutter/material.dart';
 
 class AddController extends ChangeNotifier {
+  Homecontroller homeData = Homecontroller();
   TextEditingController nameController = TextEditingController();
   TextEditingController numberController = TextEditingController();
   final List bloodGroups = ['A+', "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"];
   String? selectedGroups;
-
-  final CollectionReference donor = FirebaseFirestore.instance.collection('donor');
   void addDonor() {
-    final data = {
-      'name': nameController.text,
-      "phone": numberController.text,
-      "group": selectedGroups
-    };
-    donor.add(data);
+    DonorFirebaseService().submitDonoer(
+        nameController.text, numberController.text, selectedGroups);
+    homeData.donorDatas;
+    notifyListeners();
     nameController.clear();
     numberController.clear();
-  }
-
-  deleteDonor(docId) {
-    donor.doc(docId).delete();
   }
 }

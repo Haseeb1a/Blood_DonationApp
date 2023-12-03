@@ -1,4 +1,5 @@
 import 'package:blooddonation3/controller/add_controller.dart';
+import 'package:blooddonation3/controller/home_controller.dart';
 import 'package:blooddonation3/controller/update.controller.dart';
 import 'package:blooddonation3/services/firebase_options.dart';
 import 'package:blooddonation3/view/list_screen.dart';
@@ -25,16 +26,18 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => UpdateController(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => Homecontroller(),
         )
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
-          appBarTheme: AppBarTheme(
+          appBarTheme: const AppBarTheme(
               backgroundColor: Color.fromARGB(255, 158, 37, 28),
               centerTitle: true),
-          // tested with just a hot reload.
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: false,
         ),

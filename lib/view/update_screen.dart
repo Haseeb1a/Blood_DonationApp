@@ -14,24 +14,6 @@ class UpdataUser extends StatelessWidget {
       required this.number,
       required this.group,
       required this.id});
-
-  @override
-  // void initState() {
-  //   print(widget.number);
-  //   print(widget.id);
-  //   print(widget.name);
-  //   print(widget.group);
-  //   // TODO: implement initState
-  //   final tudodata = Provider.of<UpdateController>(context, listen: false);
-  //   tudodata.nameController.text = widget.name;
-  //   tudodata.numberController.text = widget.number;
-  //   tudodata.selectedGroups = widget.group;
-
-  //   super.initState();
-  // }
-
-  // final CollectionReference donor =
-
   @override
   Widget build(BuildContext context) {
     print(number);
@@ -91,7 +73,6 @@ class UpdataUser extends StatelessWidget {
                     backgroundColor: MaterialStatePropertyAll(Colors.red)),
                 onPressed: () {
                   updateData.updateDonor(id);
-                  // updateData.addDonor();
                   Navigator.push(
                       context,
                       MaterialPageRoute(
